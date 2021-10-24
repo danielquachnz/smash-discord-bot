@@ -1,0 +1,96 @@
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// ausmash
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+plugins {
+    id 'idea'
+    id "com.github.node-gradle.node" version "3.0.1"
+    id 'org.owasp.dependencycheck' version '6.1.6'
+}
+
+ext {
+    APACHE_HTTP         = '4.5.13'
+    APACHE_COMMONS_LANG = '3.6'
+    COMMONS_BEANUTILS   = '1.9.4'
+    DISCORD4J           = '3.2.0'
+    GUAVA               = '30.1-jre'
+    JACKSON             = '2.12.1'
+    JAVAX_ACTIVATION    = '1.1.1'
+    JAVAX_ANNOTATION    = '1.3.2'
+    JAVAX_EL_API        = '3.0.0'
+    JAVAX_VALIDATION    = '2.0.1.Final'
+    JDA                 = '3.5.0_329'//'4.3.0_277'
+    JSON_PATH           = '2.5.0'
+    JUNIT               = '4.13.1'
+    LOGBACK             = '1.2.3'
+    LOGBACK_ENCODER     = '6.6'
+    LOG4J2              = '2.11.0'
+    MOCKITO             = '3.7.7'
+    NETTY               = '4.1.58.Final'
+    RX                  = '1.3.8'
+    RX_STREAMS          = '1.2.1'
+    SLF4J               = '1.7.30'
+    SPRING_BOOT         = '2.4.2'
+    SPRING              = '5.3.3'
+    SPRING_WS           = '3.0.8.RELEASE'
+}
+
+subprojects {
+    repositories {
+        mavenCentral()
+    }
+
+    apply plugin: 'java'
+    apply plugin: 'jacoco'
+    apply plugin: 'org.owasp.dependencycheck'
+
+    sourceCompatibility = 8
+    targetCompatibility = 8
+
+    version = rootProject.version
+
+    configurations {
+        all*.exclude module: 'spring-boot-starter-logging'
+        all {
+          resolutionStrategy.eachDependency { details ->
+            if (details.requested.group == 'org.springframework') details.useVersion(SPRING)
+          }
+        }
+    }
+
+    dependencies {
+        implementation "com.google.guava:guava:${GUAVA}"
+        implementation "org.apache.commons:commons-lang3:${APACHE_COMMONS_LANG}"
+
+        implementation "org.springframework:spring-beans:${SPRING}"
+        implementation "org.springframework.boot:spring-boot-starter-web:${SPRING_BOOT}"
+        implementation "org.springframework:spring-beans:${SPRING}"
+//        implementation("org.springframework.ws:spring-ws-core:${SPRING_WS}"
+//        implementation("org.springframework.ws:spring-ws-security:${SPRING_WS}"
+
+        implementation "net.logstash.logback:logstash-logback-encoder:${LOGBACK_ENCODER}"
+        implementation "org.slf4j:slf4j-api:${SLF4J}"
+        implementation "org.slf4j:slf4j-simple:${SLF4J}"
+        implementation "org.slf4j:log4j-over-slf4j:${SLF4J}"
+
+        implementation "com.discord4j:discord4j-core:${DISCORD4J}"
+
+        testImplementation "org.springframework.boot:spring-boot-starter-test:${SPRING_BOOT}"
+        testImplementation "com.jayway.jsonpath:json-path:${JSON_PATH}"
+        testImplementation "com.jayway.jsonpath:json-path-assert:${JSON_PATH}"
+
+        testImplementation "junit:junit:${JUNIT}"
+        testImplementation "org.springframework:spring-test:${SPRING}"
+        testImplementation "org.springframework.boot:spring-boot-test:${SPRING_BOOT}"
+
+    }
+
+    tasks.withType(Test) {
+        systemProperty("user.timezone", "UTC")
+    }
+}
+
+wrapper {
+    gradleVersion = "6.8.3"
+    distributionType = "ALL"
+}

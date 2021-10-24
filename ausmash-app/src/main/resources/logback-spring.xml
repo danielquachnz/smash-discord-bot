@@ -1,0 +1,62 @@
+<configuration>
+
+    <appender name="STDOUT-DEV" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %5p [%25.25t] %-40.40logger{39} [traceId: %X{dd.trace_id}, spanId: %X{dd.span_id}] - [uuid: %X{uuid}] - [tenantId: %X{tenantId}]: %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="STDOUT-PROD" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder" />
+    </appender>
+
+    <appender name="METRICS" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/metrics.%d{yyyy-MM-dd, UTC}.log</fileNamePattern>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="io.tradeledger.metrics-logger" level="INFO" additivity="false">
+        <appender-ref ref="METRICS" />
+    </logger>
+
+    <logger name="io.tradeledger" level="DEBUG" />
+    <logger name="io.tradeledger.platform.rest.view" level="INFO" />
+
+    <logger name="org.mongodb.driver" level="WARN" />
+
+    <logger name="org.springframework.data.convert.CustomConversions" level="ERROR" />
+
+    <logger name="ratpack.request" level="DEBUG" />
+    <logger name="ratpack.server.RatpackServer" level="INFO" />
+
+    <springProfile name="testing">
+        <logger name="org.springframework.core" level="ERROR" />
+        <logger name="io.tradeledger.platform.test" level="WARN" />
+        <logger name="io.tradeledger.platform.test.integration.rest" level="DEBUG" />
+        <logger name="io.tradeledger" level="DEBUG" />
+        <logger name="org.springframework.data.mongodb.core.index.MongoPersistentEntityIndexCreator" level="DEBUG" />
+        <root level="INFO">
+            <appender-ref ref="STDOUT-DEV"/>
+        </root>
+    </springProfile>
+
+    <springProfile name="development">
+        <logger name="io.tradeledger" level="DEBUG" />
+        <logger name="ratpack.request" level="DEBUG" />
+        <root level="INFO">
+            <appender-ref ref="STDOUT-DEV"/>
+        </root>
+    </springProfile>
+
+    <springProfile name="production">
+        <logger name="io.tradeledger" level="INFO" />
+        <root level="WARN">
+            <appender-ref ref="STDOUT-PROD"/>
+        </root>
+    </springProfile>
+
+</configuration>

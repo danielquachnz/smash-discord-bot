@@ -1,0 +1,8 @@
+spring.application.name: ausmash-bot
+# # # # # # # # # # # # # # # # # # # # #
+discord:
+  apiKey:
+
+ausmash:
+  apiKey:
+  url: https://api.ausmash.com.au/

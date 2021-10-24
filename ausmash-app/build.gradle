@@ -1,0 +1,55 @@
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// ausmash-app
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+plugins {
+    id 'org.springframework.boot' version "${SPRING_BOOT}"
+}
+
+idea {
+    module {
+        downloadJavadoc = true
+        downloadSources = true
+    }
+}
+
+defaultTasks 'clean', 'build'
+
+configurations {
+    jaxb
+}
+
+springBoot {
+    buildInfo {
+        properties {
+            version = getVersion()
+        }
+    }
+}
+
+bootRun {
+    systemProperties = System.properties
+}
+
+bootJar {
+    archiveName = "${rootProject.name}.jar"
+    mainClassName = 'gg.smash.Start'
+    manifest {
+
+    }
+}
+
+
+sourceSets.main.java.srcDirs = ['src/main/java']
+
+processResources {
+    def projects = [
+            'ausmash-app'
+    ]
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    projects.each {
+        from("./src/main/resources") {
+            include '**/*.yml'
+        }
+    }
+}
