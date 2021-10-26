@@ -5,8 +5,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "ausmash", ignoreUnknownFields = true)
 public class AusmashConfig {
     private String apiKey;
-
-    private String url;
+    private String apiUrl;
+    private String siteUrl;
 
     public String getApiKey() {
         return apiKey;
@@ -16,11 +16,19 @@ public class AusmashConfig {
         this.apiKey = apiKey;
     }
 
-    public String getUrl() {
-        return url;
+    public String getApiUrl() {
+        return apiUrl;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setApiUrl(String apiUrl) {
+        this.apiUrl = apiUrl;
+    }
+
+    public String getSiteUrl() {
+        return siteUrl;
+    }
+
+    public void setSiteUrl(String siteUrl) {
+        this.siteUrl = siteUrl;
     }
 }

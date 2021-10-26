@@ -2,17 +2,18 @@ package au.com.ausmash.service.messageCreatedEvent;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import au.com.ausmash.rest.exception.HttpException;
 import au.com.ausmash.service.CommandService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.common.collect.ImmutableList;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.MessageChannel;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
@@ -23,6 +24,7 @@ public class MessageCreatedEventService {
     @Autowired
     private MessageCreatedEventMapperService messageCreatedEventMapperService;
 
+    private static final Logger LOG = LoggerFactory.getLogger(MessageCreatedEventService.class);
     static final String UNRECOGNISED_COMMAND = "Sorry, that command was not recognised";
     private static final String COMMAND_PREFIX = "!";
 
@@ -49,7 +51,12 @@ public class MessageCreatedEventService {
 
         if (toMonoMessageService.isPresent()) {
             final List<String> params = ImmutableList.copyOf(messageComponents);
-            return toMonoMessageService.get().processMessage(messageChannel, params);
+            try {
+                return toMonoMessageService.get().processMessage(messageChannel, params);
+            } catch (final HttpException e) {
+                LOG.info(String.format("Encountered HttpException of type %s: %s", e.getClass().getSimpleName(), e.getMessage()));
+                return messageChannel.flatMap(channel -> channel.createMessage(e.getMessage()));
+            }
         }
 
         return messageChannel.flatMap(channel -> channel.createMessage(UNRECOGNISED_COMMAND));

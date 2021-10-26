@@ -23,6 +23,8 @@ class MessageCreatedEventMapperService {
     private EloCommandService eloCommandService;
     @Autowired
     private GamesCommandService gamesCommandService;
+    @Autowired
+    private VodsCommandService vodsCommandService;
 
     private Map<String, CommandService> serviceMap;
 
@@ -35,6 +37,7 @@ class MessageCreatedEventMapperService {
             .put(PlayerCommandService.COMMAND_NAME, playerCommandService)
             .put(EloCommandService.COMMAND_NAME, eloCommandService)
             .put(GamesCommandService.COMMAND_NAME, gamesCommandService)
+            .put(VodsCommandService.COMMAND_NAME, vodsCommandService)
             .build();
     }
 

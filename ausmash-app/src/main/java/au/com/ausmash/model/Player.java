@@ -159,9 +159,8 @@ public class Player {
             builder.append(String.format("Bio: %s\n", bio));
         }
 
-        builder.append(String.format("Tournament Count: %d\n", tournamentCount));
+        builder.append(String.format("Tournament     Count: %d\n", tournamentCount));
         builder.append(String.format("Match Count: %d\n", matchCount));
-        builder.append(String.format("Result Count: %d\n", resultCount));
         builder.append(String.format("Video Count: %d\n", videoCount));
         return builder.toString();
     }

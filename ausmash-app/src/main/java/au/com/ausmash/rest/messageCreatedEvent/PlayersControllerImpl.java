@@ -1,54 +1,65 @@
 package au.com.ausmash.rest.messageCreatedEvent;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import au.com.ausmash.model.Elo;
 import au.com.ausmash.model.Player;
-import au.com.ausmash.model.Region;
+import au.com.ausmash.model.Vod;
 import au.com.ausmash.rest.AbstractAusmashController;
-import au.com.ausmash.service.messageCreatedEvent.PlayerCommandService;
+import au.com.ausmash.rest.exception.ResourceNotFoundException;
+import au.com.ausmash.util.UrlUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.HttpClientErrorException;
 
 @RestController
-public class PlayersControllerImpl extends AbstractAusmashController implements PlayersController {
+class PlayersControllerImpl extends AbstractAusmashController implements PlayersController {
 
     private static final Logger LOG = LoggerFactory.getLogger(PlayersControllerImpl.class);
+    private static final int VOD_LIMIT = 3;
 
     @Override
     public Player find(String name, String region) {
-        final String url = createUrl(
-            getAusmashUrl(PlayersController.PATH),"find", name, region);
+        final String url = UrlUtil.createUrl(
+            getAusmashApiUrl(PlayersController.PATH),"find", name, region);
         LOG.info(String.format("player url = %s", url));
-        final ResponseEntity<Player> response = restTemplate.exchange(
-            url,
-            HttpMethod.GET,
-            getAusmashApiKeyHeader(),
-            Player.class
-        );
+        try {
+            final ResponseEntity<Player> response = restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                getAusmashApiKeyHeader(),
+                Player.class
+            );
 
-        if (response.getStatusCode().is2xxSuccessful()){
-            return response.getBody();
+            if (response.getStatusCode().is2xxSuccessful()){
+                return response.getBody();
+            }
+
+            return null;
+        } catch (final HttpClientErrorException e) {
+            if (e.getStatusCode().equals(HttpStatus.NOT_FOUND)){
+                throw new ResourceNotFoundException(String.format(
+                    "The player \"%s\" of region \"%s\" could not be found on Ausmash. Please check your details", name, region
+                ));
+            }
+            throw e;
         }
-
-        return null;
-
     }
 
     @Override
     public List<Elo> getEloForPlayer(String name, String region) {
         final Player player = find(name, region);
         final String id = Integer.toString(player.getId());
-        final String url = createUrl(
-            getAusmashUrl(PlayersController.PATH),id, "elo");
+        final String url = UrlUtil.createUrl(
+            getAusmashApiUrl(PlayersController.PATH),id, "elo");
         final ResponseEntity<Elo[]> response = restTemplate.exchange(
             url,
             HttpMethod.GET,
@@ -59,5 +70,27 @@ public class PlayersControllerImpl extends AbstractAusmashController implements 
         return Arrays.stream(Optional.ofNullable(response.getBody()).orElse(new Elo[0]))
             .sorted((r1, r2) -> StringUtils.compareIgnoreCase(r1.toString(), r2.toString()))
             .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Vod> getVodsForPlayer(String name, String region) {
+        final Player player = find(name, region);
+        final String id = Integer.toString(player.getId());
+        final String url = UrlUtil.createUrl(
+            getAusmashApiUrl(PlayersController.PATH),id, "videos");
+        final ResponseEntity<Vod[]> response = restTemplate.exchange(
+            url,
+            HttpMethod.GET,
+            getAusmashApiKeyHeader(),
+            Vod[].class
+        );
+
+        final List<Vod> vods = Arrays.stream(Optional.ofNullable(response.getBody()).orElse(new Vod[0]))
+            .sorted((r1, r2) -> r2.getMatch().getTourney().getTourneyDate().compareTo(r1.getMatch().getTourney().getTourneyDate()))
+            .collect(Collectors.toList());
+        if (vods.size() > VOD_LIMIT) {
+            return vods.subList(0, VOD_LIMIT);
+        }
+        return vods;
     }
 }

@@ -165,7 +165,7 @@ public class Elo {
     @Override
     public String toString() {
         final StringBuilder builder = new StringBuilder();
-        builder.append(String.format("Game: %s", game.toString()));
+        builder.append(String.format("Game: %s\n", game.toString()));
         if (elo != 0) {
             builder.append(String.format("ELO: %d\n", elo));
         }

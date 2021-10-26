@@ -1,10 +1,9 @@
 package au.com.ausmash.rest;
 
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.Optional;
 
 import au.com.ausmash.config.AusmashConfig;
+import au.com.ausmash.util.UrlUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -28,15 +27,7 @@ public abstract class AbstractAusmashController {
         return httpEntity;
     }
 
-    protected String getAusmashUrl(String path) {
-        return ausmashConfig.getUrl().concat(path);
-    }
-
-    protected String createUrl(String url, String... paths) {
-        final Optional<String> oPath = Arrays.stream(paths).reduce((path1, path2) -> path1.concat("/").concat(path2));
-        if (oPath.isPresent()) {
-            return url.concat("/").concat(oPath.get());
-        }
-        return url;
+    protected String getAusmashApiUrl(String path) {
+        return UrlUtil.createUrl(ausmashConfig.getApiUrl(), path);
     }
 }

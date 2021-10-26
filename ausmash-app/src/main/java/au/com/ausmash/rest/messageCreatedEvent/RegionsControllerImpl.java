@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import au.com.ausmash.model.Channel;
 import au.com.ausmash.model.Region;
 import au.com.ausmash.rest.AbstractAusmashController;
 import org.apache.commons.lang3.StringUtils;
@@ -15,12 +14,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class RegionsControllerImpl extends AbstractAusmashController implements RegionsController {
+class RegionsControllerImpl extends AbstractAusmashController implements RegionsController {
 
     @Override
     public List<Region> listAll() {
         final ResponseEntity<Region[]> regions = restTemplate.exchange(
-            getAusmashUrl(RegionsController.PATH),
+            getAusmashApiUrl(RegionsController.PATH),
             HttpMethod.GET,
             getAusmashApiKeyHeader(),
             Region[].class
