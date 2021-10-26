@@ -1,1 +1,1 @@
-# smash.gg discord bot
+# ausmash discord bot
