@@ -8,3 +8,4 @@
 **/*.ipr
 **/*.iws
 **/logs/*.log
+ausmash-app/src/main/resources/config/application.yml
