@@ -2,6 +2,7 @@ package au.com.ausmash.service.messageCreatedEvent;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -40,7 +41,7 @@ public class MessageCreatedEventService {
                 .filter(StringUtils::isNotBlank)
                 .collect(Collectors.toList());
 
-        final String command = messageComponents.get(0);
+        final String command = messageComponents.get(0).toLowerCase();
         messageComponents.remove(0);
 
         final Optional<CommandService> toMonoMessageService

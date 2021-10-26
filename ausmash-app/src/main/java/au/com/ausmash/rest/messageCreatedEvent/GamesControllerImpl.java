@@ -12,7 +12,9 @@ import au.com.ausmash.rest.AbstractAusmashController;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RestController;
 
+@RestController
 public class GamesControllerImpl extends AbstractAusmashController implements GamesController {
     @Override
     public List<Game> listAll() {
