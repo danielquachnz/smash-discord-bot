@@ -2,7 +2,6 @@ package au.com.ausmash.service.messageCreatedEvent;
 
 import java.util.List;
 
-import au.com.ausmash.Start;
 import au.com.ausmash.service.CommandService;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.MessageChannel;
@@ -24,5 +23,10 @@ class PingCommandService implements CommandService {
             return messageChannel.flatMap(channel -> channel.createMessage(MessageCreatedEventService.UNRECOGNISED_COMMAND));
         }
         return messageChannel.flatMap(channel -> channel.createMessage("pong!"));
+    }
+
+    @Override
+    public Mono<Message> help(Mono<MessageChannel> messageChannel) {
+        return messageChannel.flatMap(channel -> channel.createMessage("try it"));
     }
 }

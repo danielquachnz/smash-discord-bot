@@ -3,9 +3,10 @@ package au.com.ausmash.service.messageCreatedEvent;
 import java.util.List;
 
 import au.com.ausmash.model.Player;
-import au.com.ausmash.model.validator.RegionValidator;
+import au.com.ausmash.model.Region;
 import au.com.ausmash.rest.messageCreatedEvent.PlayersController;
 import au.com.ausmash.service.CommandService;
+import au.com.ausmash.util.ParameterUtil;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.MessageChannel;
 import org.slf4j.Logger;
@@ -43,6 +44,29 @@ public class PlayerCommandService implements CommandService {
         LOG.info(String.format("player name = %s", name));
         final String header = String.format("===%s (%s)===\n", player.getName(), player.getRegionShort());
         return messageChannel.flatMap(channel -> channel.createMessage(header.concat(player.toString())));
+    }
 
+    @Override
+    public Mono<Message> help(Mono<MessageChannel> messageChannel) {
+        final StringBuilder stringBuilder = new StringBuilder();
+
+        stringBuilder.append(String.format("%s%s [%s] [%s]\n\n",
+            MessageCreatedEventService.COMMAND_PREFIX,
+            COMMAND_NAME,
+            ParameterUtil.PLAYER_NAME,
+            ParameterUtil.REGION_SHORT
+        ));
+
+        stringBuilder.append("Returns the player information of the given player\n");
+
+        stringBuilder.append(String.format(
+            "e.g. %s%s %s %s",
+            MessageCreatedEventService.COMMAND_PREFIX,
+            COMMAND_NAME,
+            "Wontonz",
+            Region.RegionType.NZ.name()
+        ));
+
+        return messageChannel.flatMap(channel -> channel.createMessage(stringBuilder.toString()));
     }
 }

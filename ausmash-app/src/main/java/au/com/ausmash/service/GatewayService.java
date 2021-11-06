@@ -3,7 +3,6 @@ package au.com.ausmash.service;
 import javax.annotation.PostConstruct;
 
 import au.com.ausmash.config.DiscordConfig;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import discord4j.core.DiscordClient;
 import discord4j.core.GatewayDiscordClient;
 import discord4j.core.event.domain.message.MessageCreateEvent;

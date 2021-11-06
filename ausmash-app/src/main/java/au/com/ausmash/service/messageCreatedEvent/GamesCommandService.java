@@ -3,8 +3,6 @@ package au.com.ausmash.service.messageCreatedEvent;
 import java.util.List;
 
 import au.com.ausmash.model.Game;
-import au.com.ausmash.model.Game;
-import au.com.ausmash.rest.messageCreatedEvent.GamesController;
 import au.com.ausmash.rest.messageCreatedEvent.GamesController;
 import au.com.ausmash.service.CommandService;
 import discord4j.core.object.entity.Message;
@@ -38,5 +36,12 @@ public class GamesCommandService implements CommandService {
             .map(StringUtils::trim)
             .reduce(HEADER, (partialString, element) -> partialString.concat("\n").concat(element));
         return messageChannel.flatMap(channel -> channel.createMessage(message));
+    }
+
+    @Override
+    public Mono<Message> help(Mono<MessageChannel> messageChannel) {
+        return messageChannel.flatMap(channel ->
+            channel.createMessage("Returns a list of all games and their game codes")
+        );
     }
 }

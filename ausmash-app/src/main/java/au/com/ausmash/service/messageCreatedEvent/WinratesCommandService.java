@@ -6,10 +6,12 @@ import java.util.Optional;
 
 import au.com.ausmash.model.Game;
 import au.com.ausmash.model.Player;
+import au.com.ausmash.model.Region;
 import au.com.ausmash.model.WinRate;
 import au.com.ausmash.rest.messageCreatedEvent.GamesController;
 import au.com.ausmash.rest.messageCreatedEvent.PlayersController;
 import au.com.ausmash.service.CommandService;
+import au.com.ausmash.util.ParameterUtil;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.MessageChannel;
 import org.slf4j.Logger;
@@ -87,10 +89,34 @@ public class WinratesCommandService implements CommandService {
         double winRatePercentage =  totalWins * 100.0 / totalGames;
 
         return Optional.of(String.format(
-            "%s sets won, %s sets lost, set win percentage = %.2f%%",
+            "%s sets won, %s sets lost, set win rate = %.2f%%",
             totalWins,
             totalLosses,
             winRatePercentage
         ));
+    }
+
+    @Override
+    public Mono<Message> help(Mono<MessageChannel> messageChannel) {
+        final StringBuilder stringBuilder = new StringBuilder();
+
+        stringBuilder.append(String.format("%s%s [%s] [%s]\n\n",
+            MessageCreatedEventService.COMMAND_PREFIX,
+            COMMAND_NAME,
+            ParameterUtil.PLAYER_NAME,
+            ParameterUtil.REGION_SHORT
+        ));
+
+        stringBuilder.append("Returns the win rates for each game for the given player\n");
+
+        stringBuilder.append(String.format(
+            "e.g. %s%s %s %s",
+            MessageCreatedEventService.COMMAND_PREFIX,
+            COMMAND_NAME,
+            "Wontonz",
+            Region.RegionType.NZ.name()
+        ));
+
+        return messageChannel.flatMap(channel -> channel.createMessage(stringBuilder.toString()));
     }
 }

@@ -4,16 +4,15 @@ import java.util.List;
 
 import au.com.ausmash.config.AusmashConfig;
 import au.com.ausmash.model.Match;
-import au.com.ausmash.model.Player;
 import au.com.ausmash.model.PlayerShort;
+import au.com.ausmash.model.Region;
 import au.com.ausmash.model.Vod;
-import au.com.ausmash.model.validator.RegionValidator;
 import au.com.ausmash.rest.messageCreatedEvent.PlayersController;
 import au.com.ausmash.service.CommandService;
+import au.com.ausmash.util.ParameterUtil;
 import au.com.ausmash.util.UrlUtil;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.MessageChannel;
-import io.netty.util.internal.StringUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -91,5 +90,29 @@ public class VodsCommandService implements CommandService {
         }
 
         return match.getTeamLoser2();
+    }
+
+    @Override
+    public Mono<Message> help(Mono<MessageChannel> messageChannel) {
+        final StringBuilder stringBuilder = new StringBuilder();
+
+        stringBuilder.append(String.format("%s%s [%s] [%s]\n\n",
+            MessageCreatedEventService.COMMAND_PREFIX,
+            COMMAND_NAME,
+            ParameterUtil.PLAYER_NAME,
+            ParameterUtil.REGION_SHORT
+        ));
+
+        stringBuilder.append("Returns the latest vods for the given player\n");
+
+        stringBuilder.append(String.format(
+            "e.g. %s%s %s %s",
+            MessageCreatedEventService.COMMAND_PREFIX,
+            COMMAND_NAME,
+            "Wontonz",
+            Region.RegionType.NZ.name()
+        ));
+
+        return messageChannel.flatMap(channel -> channel.createMessage(stringBuilder.toString()));
     }
 }

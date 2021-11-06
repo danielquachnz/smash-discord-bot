@@ -2,12 +2,9 @@ package au.com.ausmash.service.messageCreatedEvent;
 
 import java.util.List;
 
-import au.com.ausmash.Start;
 import au.com.ausmash.model.Channel;
 import au.com.ausmash.rest.messageCreatedEvent.ChannelsController;
 import au.com.ausmash.service.CommandService;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.MessageChannel;
 import org.apache.commons.lang3.StringUtils;
@@ -40,5 +37,10 @@ class ChannelsCommandService implements CommandService {
             .map(StringUtils::trim)
             .reduce(HEADER, (partialString, element) -> partialString.concat("\n").concat(element));
         return messageChannel.flatMap(channel -> channel.createMessage(message));
+    }
+
+    @Override
+    public Mono<Message> help(Mono<MessageChannel> messageChannel) {
+        return messageChannel.flatMap(channel -> channel.createMessage("Returns a list of all channels"));
     }
 }
