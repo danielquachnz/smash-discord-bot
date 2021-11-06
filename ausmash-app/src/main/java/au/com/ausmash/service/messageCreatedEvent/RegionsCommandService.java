@@ -24,7 +24,7 @@ public class RegionsCommandService implements CommandService {
 
     private static final Logger LOG = LoggerFactory.getLogger(ChannelsCommandService.class);
     private static final String HEADER = "=====REGIONS=====\n";
-    static final String COMMAND_NAME = "regions";
+    public static final String COMMAND_NAME = "regions";
 
     @Override
     public Mono<Message> processMessage(Mono<MessageChannel> messageChannel, List<String> messageComponents) {

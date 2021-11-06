@@ -23,7 +23,7 @@ public class GamesCommandService implements CommandService {
 
     private static final Logger LOG = LoggerFactory.getLogger(ChannelsCommandService.class);
     private static final String HEADER = "=====GAMES=====";
-    static final String COMMAND_NAME = "games";
+    public static final String COMMAND_NAME = "games";
 
     @Override
     public Mono<Message> processMessage(Mono<MessageChannel> messageChannel, List<String> messageComponents) {

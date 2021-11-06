@@ -27,7 +27,7 @@ public class MessageCreatedEventService {
 
     private static final Logger LOG = LoggerFactory.getLogger(MessageCreatedEventService.class);
     static final String UNRECOGNISED_COMMAND = "Sorry, that command was not recognised";
-    private static final String COMMAND_PREFIX = "!";
+    public static final String COMMAND_PREFIX = "!!";
 
     public Mono<Message> process(MessageCreateEvent event){
         final Mono<MessageChannel> messageChannel = event.getMessage().getChannel();
