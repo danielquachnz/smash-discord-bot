@@ -29,6 +29,8 @@ public class VodsCommandService implements CommandService {
 
     private static final Logger LOG = LoggerFactory.getLogger(VodsCommandService.class);
     static final String COMMAND_NAME = "vods";
+    private static final String HEADER = "=====Latest VODs for %s (%s)=====\n";
+    private static final String FOOTER = "For more VODs visit %s";
 
     @Override
     public Mono<Message> processMessage(Mono<MessageChannel> messageChannel, List<String> messageComponents) {
@@ -55,14 +57,14 @@ public class VodsCommandService implements CommandService {
 
         final PlayerShort player = getPlayer(vods.get(0).getMatch(), name);
         final StringBuilder stringBuilder = new StringBuilder();
-        final String header = String.format("===Latest VODs for %s (%s)===\n", name, region);
+        final String header = String.format(HEADER, name, region);
         stringBuilder.append(header);
         for (final Vod vod : vods) {
             stringBuilder.append(vod.toString()).append("\n");
         }
         final String vodsURL = UrlUtil.createUrl(
             ausmashConfig.getSiteUrl(), "players", Integer.toString(player.getId()), player.getName(), "videos");
-        stringBuilder.append(String.format("For more VODs visit %s", vodsURL));
+        stringBuilder.append(String.format(FOOTER, vodsURL));
         LOG.info(stringBuilder.toString());
         return messageChannel.flatMap(channel -> channel.createMessage(stringBuilder.toString()));
 

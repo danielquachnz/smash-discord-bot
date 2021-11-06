@@ -21,7 +21,7 @@ public class EloCommandService  implements CommandService {
     private PlayersController playersController;
 
     private static final Logger LOG = LoggerFactory.getLogger(EloCommandService.class);
-    private static final String HEADER = "===ELO for %s (%s)===\n";
+    private static final String HEADER = "=====ELO for %s (%s)=====\n";
     static final String COMMAND_NAME = "elo";
 
     @Override

@@ -22,6 +22,7 @@ public class PlayerCommandService implements CommandService {
 
     private static final Logger LOG = LoggerFactory.getLogger(PlayerCommandService.class);
     static final String COMMAND_NAME = "player";
+    private static final String HEADER = "=====%s (%s)=====\n";
 
     @Override
     public Mono<Message> processMessage(Mono<MessageChannel> messageChannel, List<String> messageComponents) {
@@ -42,7 +43,7 @@ public class PlayerCommandService implements CommandService {
         final String name = builder.toString();
         final Player player = playersController.find(name, region);
         LOG.info(String.format("player name = %s", name));
-        final String header = String.format("===%s (%s)===\n", player.getName(), player.getRegionShort());
+        final String header = String.format(HEADER, player.getName(), player.getRegionShort());
         return messageChannel.flatMap(channel -> channel.createMessage(header.concat(player.toString())));
     }
 

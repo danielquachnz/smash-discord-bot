@@ -1,27 +1,24 @@
 package au.com.ausmash.service.messageCreatedEvent;
 
+import java.util.Arrays;
 import java.util.List;
 
-import au.com.ausmash.model.Game;
-import au.com.ausmash.rest.messageCreatedEvent.GamesController;
+import au.com.ausmash.model.NzRegion;
+import au.com.ausmash.model.Region;
 import au.com.ausmash.service.CommandService;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.MessageChannel;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 @Service
-public class GamesCommandService implements CommandService {
-    @Autowired
-    private GamesController gamesController;
-
-    private static final Logger LOG = LoggerFactory.getLogger(ChannelsCommandService.class);
-    private static final String HEADER = "=====Games=====";
-    public static final String COMMAND_NAME = "games";
+public class NzRegionsCommandService implements CommandService {
+    private static final Logger LOG = LoggerFactory.getLogger(NzRegionsCommandService.class);
+    private static final String HEADER = "=====NZ PR Regions=====\n";
+    public static final String COMMAND_NAME = "nzregions";
 
     @Override
     public Mono<Message> processMessage(Mono<MessageChannel> messageChannel, List<String> messageComponents) {
@@ -30,9 +27,9 @@ public class GamesCommandService implements CommandService {
                 .reduce(COMMAND_NAME.concat(" messageComponents:"), (partialString, element) -> partialString.concat(" ").concat(element)));
             return messageChannel.flatMap(channel -> channel.createMessage(MessageCreatedEventService.UNRECOGNISED_COMMAND));
         }
-        final List<Game> games = gamesController.listAll();
-        final String message = games.stream()
-            .map(Game::toString)
+
+        final String message = Arrays.stream(NzRegion.values())
+            .map(NzRegion::toString)
             .map(StringUtils::trim)
             .reduce(HEADER, (partialString, element) -> partialString.concat("\n").concat(element));
         return messageChannel.flatMap(channel -> channel.createMessage(message));
@@ -41,7 +38,7 @@ public class GamesCommandService implements CommandService {
     @Override
     public Mono<Message> help(Mono<MessageChannel> messageChannel) {
         return messageChannel.flatMap(channel ->
-            channel.createMessage("Returns a list of all games and their game codes")
+            channel.createMessage("Returns a list of all NZ PR regions and their PR region codes")
         );
     }
 }

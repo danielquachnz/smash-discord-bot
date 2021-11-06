@@ -19,8 +19,8 @@ public class RegionsCommandService implements CommandService {
     @Autowired
     private RegionsController regionsController;
 
-    private static final Logger LOG = LoggerFactory.getLogger(ChannelsCommandService.class);
-    private static final String HEADER = "=====REGIONS=====\n";
+    private static final Logger LOG = LoggerFactory.getLogger(RegionsCommandService.class);
+    private static final String HEADER = "=====Regions=====";
     public static final String COMMAND_NAME = "regions";
 
     @Override

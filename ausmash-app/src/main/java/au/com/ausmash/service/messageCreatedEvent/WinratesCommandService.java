@@ -28,7 +28,7 @@ public class WinratesCommandService implements CommandService {
     private GamesController gamesController;
 
     private static final Logger LOG = LoggerFactory.getLogger(WinratesCommandService.class);
-    private static final double TOLERANCE = 0.000000001;
+    private static final String HEADER = "===Win rates for %s (%s)===\n";
     static final String COMMAND_NAME = "winrates";
 
     @Override
@@ -51,7 +51,7 @@ public class WinratesCommandService implements CommandService {
         final Player player = playersController.find(name, regionString);
 
         final StringBuilder stringBuilder = new StringBuilder();
-        final String header = String.format("===Win rates for %s (%s)===\n", player.getName(), player.getRegionShort());
+        final String header = String.format(HEADER, player.getName(), player.getRegionShort());
         stringBuilder.append(header);
 
         Arrays.stream(Game.GameType.values()).forEachOrdered(gameType -> {
@@ -80,12 +80,12 @@ public class WinratesCommandService implements CommandService {
                 .map(WinRate::getLosses)
                 .reduce(0, Integer::sum);
 
-        double totalGames = totalWins + totalLosses;
 
-        if (totalGames < TOLERANCE) {
+        if (totalWins == 0 && totalLosses == 0) {
             return Optional.empty();
         }
 
+        double totalGames = totalWins + totalLosses;
         double winRatePercentage =  totalWins * 100.0 / totalGames;
 
         return Optional.of(String.format(

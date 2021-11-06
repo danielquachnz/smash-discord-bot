@@ -14,7 +14,7 @@ import reactor.core.publisher.Mono;
 @Service
 class HelpCommandService implements CommandService {
     static final String COMMAND_NAME = "help";
-    private static final String COMMAND_LIST_HEADER = "===Supported Commands===\n";
+    private static final String COMMAND_LIST_HEADER = "=====Supported Commands=====\n";
     private static final String COMMAND_LIST_FOOTER = String.format(
         "\nType %s%s [COMMAND] to get details about the command",
         MessageCreatedEventService.COMMAND_PREFIX,
@@ -48,7 +48,7 @@ class HelpCommandService implements CommandService {
         );
 
         stringBuilder.append(String.format(
-            "Try %s%s [command] to get more information",
+            "\nTry %s%s [command] to get more information",
             MessageCreatedEventService.COMMAND_PREFIX,
             COMMAND_NAME
         ));
