@@ -24,8 +24,8 @@ class UpcomingCommandService implements CommandService {
     private TourneysController tourneysController;
 
     private static final Logger LOG = LoggerFactory.getLogger(UpcomingCommandService.class);
-    private static final String HEADER_ALL = "=====Upcoming Tournaments=====\n";
-    private static final String HEADER_REGION = "=====Upcoming Tournaments For %s=====\n";
+    private static final String HEADER_ALL = "=====Upcoming Tournaments=====";
+    private static final String HEADER_REGION = "=====Upcoming Tournaments For %s=====";
     static final String COMMAND_NAME = "upcoming";
 
     @Override
@@ -40,11 +40,11 @@ class UpcomingCommandService implements CommandService {
         }
 
         if (messageComponents.size() == 1) {
-            final String region = messageComponents.get(0);
-            RegionValidator.validateShortName(region);
-            final String header = String.format(HEADER_REGION, region.toUpperCase());
+            final String regionCode = messageComponents.get(0);
+            RegionValidator.validateShortName(regionCode);
+            final String header = String.format(HEADER_REGION, regionCode.toUpperCase());
             final String message = tourneysController.listUpcoming().stream()
-                .filter(t -> StringUtils.equalsIgnoreCase(t.getRegionShort(), region))
+                .filter(t -> StringUtils.equalsIgnoreCase(t.getRegionShort().name(), regionCode))
                 .map(Tourney::toString)
                 .map(StringUtils::trim)
                 .reduce(header, (partialString, element) -> partialString.concat("\n\n").concat(element));

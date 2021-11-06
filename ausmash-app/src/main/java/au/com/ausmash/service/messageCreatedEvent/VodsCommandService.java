@@ -49,7 +49,7 @@ public class VodsCommandService implements CommandService {
         }
 
         final String name = builder.toString();
-        final List<Vod> vods = playersController.getVodsForPlayer(name, region);
+        final List<Vod> vods = playersController.listVodsForPlayer(name, region);
 
         if (vods.isEmpty()){
             return messageChannel.flatMap(channel -> channel.createMessage(String.format("No VODs found for %s, region: %s", name, region)));

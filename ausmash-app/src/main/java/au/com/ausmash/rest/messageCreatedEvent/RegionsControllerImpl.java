@@ -18,16 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 class RegionsControllerImpl extends AbstractAusmashController implements RegionsController {
 
     @Override
-    public Region findByShortName(String regionShortname) {
-        return listAll().stream()
-            .filter(r -> StringUtils.equalsIgnoreCase(r.getRegionType().name(), regionShortname))
-            .findFirst()
-            .orElseThrow(() -> new ResourceNotFoundException(
-                String.format("The region \"%s\" could not be found on Ausmash. Please check your details using !regions", regionShortname)));
-
-    }
-
-    @Override
     public List<Region> listAll() {
         final ResponseEntity<Region[]> regions = restTemplate.exchange(
             getAusmashApiUrl(RegionsController.PATH),

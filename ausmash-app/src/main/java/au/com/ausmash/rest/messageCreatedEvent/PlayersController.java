@@ -11,7 +11,7 @@ public interface PlayersController {
     String PATH = "players";
     Player find(String name, String region);
 
-    List<Elo> getEloForPlayer(String name, String region);
-    List<Vod> getVodsForPlayer(String name, String region);
-    List<WinRate> getWinratesForPlayerAndGame(int playerId, int gameId);
+    List<Elo> listEloForPlayer(String name, String region);
+    List<Vod> listVodsForPlayer(String name, String region);
+    List<WinRate> listWinratesForPlayerAndGame(int playerId, int gameId);
 }

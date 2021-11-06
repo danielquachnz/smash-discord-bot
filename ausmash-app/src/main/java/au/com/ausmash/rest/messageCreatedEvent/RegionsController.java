@@ -6,6 +6,5 @@ import au.com.ausmash.model.Region;
 
 public interface RegionsController {
     String PATH = "regions";
-    Region findByShortName(String regionShortname);
     List<Region> listAll();
 }

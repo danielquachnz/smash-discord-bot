@@ -58,7 +58,7 @@ class PlayersControllerImpl extends AbstractAusmashController implements Players
     }
 
     @Override
-    public List<Elo> getEloForPlayer(String name, String region) {
+    public List<Elo> listEloForPlayer(String name, String region) {
         final Player player = find(name, region);
         final String id = Integer.toString(player.getId());
         final String url = UrlUtil.createUrl(
@@ -76,7 +76,7 @@ class PlayersControllerImpl extends AbstractAusmashController implements Players
     }
 
     @Override
-    public List<Vod> getVodsForPlayer(String name, String region) {
+    public List<Vod> listVodsForPlayer(String name, String region) {
         final Player player = find(name, region);
         final String id = Integer.toString(player.getId());
         final String url = UrlUtil.createUrl(
@@ -98,7 +98,7 @@ class PlayersControllerImpl extends AbstractAusmashController implements Players
     }
 
     @Override
-    public List<WinRate> getWinratesForPlayerAndGame(int playerId, int gameId) {
+    public List<WinRate> listWinratesForPlayerAndGame(int playerId, int gameId) {
         final String url = UrlUtil.createUrl(
             getAusmashApiUrl(PlayersController.PATH),
             Integer.toString(playerId),

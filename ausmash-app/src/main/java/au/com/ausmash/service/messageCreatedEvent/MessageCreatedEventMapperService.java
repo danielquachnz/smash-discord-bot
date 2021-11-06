@@ -30,6 +30,8 @@ class MessageCreatedEventMapperService {
     @Autowired
     private PlayerCommandService playerCommandService;
     @Autowired
+    private PrCommandService prCommandService;
+    @Autowired
     private RegionsCommandService regionsCommandService;
     @Autowired
     private UpcomingCommandService upcomingCommandService;
@@ -50,6 +52,7 @@ class MessageCreatedEventMapperService {
             .put(NzRegionsCommandService.COMMAND_NAME, nzRegionsCommandService)
             .put(PingCommandService.COMMAND_NAME, pingCommandService)
             .put(PlayerCommandService.COMMAND_NAME, playerCommandService)
+            .put(PrCommandService.COMMAND_NAME, prCommandService    )
             .put(RegionsCommandService.COMMAND_NAME, regionsCommandService)
             .put(UpcomingCommandService.COMMAND_NAME, upcomingCommandService)
             .put(VodsCommandService.COMMAND_NAME, vodsCommandService)

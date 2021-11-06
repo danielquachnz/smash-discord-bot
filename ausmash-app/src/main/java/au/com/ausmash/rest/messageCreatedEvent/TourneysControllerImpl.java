@@ -59,7 +59,7 @@ class TourneysControllerImpl extends AbstractAusmashController implements Tourne
 
     private Comparator<Tourney> sortByRegionAndDate() {
         return (t1, t2) -> {
-            int byRegion = StringUtils.compareIgnoreCase(t1.getRegionShort(), t2.getRegionShort());
+            int byRegion = StringUtils.compareIgnoreCase(t1.getRegionShort().name(), t2.getRegionShort().name());
 
             if (byRegion != 0) {
                 return byRegion;

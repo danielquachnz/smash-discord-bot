@@ -18,16 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 class GamesControllerImpl extends AbstractAusmashController implements GamesController {
 
     @Override
-    public Game findByShortName(String gameShortName) {
-        return listAll().stream()
-            .filter(r -> StringUtils.equalsIgnoreCase(r.getGameType().name(), gameShortName))
-            .findFirst()
-            .orElseThrow(() -> new ResourceNotFoundException(
-                String.format("The game \"%s\" could not be found on Ausmash. Please check your details using !games", gameShortName)));
-
-    }
-
-    @Override
     public List<Game> listAll() {
         final ResponseEntity<Game[]> games = restTemplate.exchange(
             getAusmashApiUrl(GamesController.PATH),

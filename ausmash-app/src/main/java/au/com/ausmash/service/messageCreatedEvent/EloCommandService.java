@@ -40,7 +40,7 @@ public class EloCommandService  implements CommandService {
         }
 
         final String name = builder.toString();
-        final List<Elo> elos = playersController.getEloForPlayer(name, region);
+        final List<Elo> elos = playersController.listEloForPlayer(name, region);
 
         if (elos.isEmpty()){
             return Mono.empty();
@@ -48,7 +48,7 @@ public class EloCommandService  implements CommandService {
 
         final StringBuilder stringBuilder = new StringBuilder();
         final String header = String.format(HEADER,
-            elos.get(0).getPlayer().getName(), elos.get(0).getPlayer().getRegionShort().toUpperCase());
+            elos.get(0).getPlayer().getName(), elos.get(0).getPlayer().getRegionShort().name());
         stringBuilder.append(header);
         for (final Elo elo : elos) {
             stringBuilder.append(elo.toString()).append("\n");

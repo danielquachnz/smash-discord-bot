@@ -1,15 +1,19 @@
 package au.com.ausmash.model;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import net.logstash.logback.encoder.org.apache.commons.lang3.StringUtils;
 
 @JsonFormat(with = JsonFormat.Feature.ACCEPT_CASE_INSENSITIVE_PROPERTIES)
 public class Ranking {
     private int id;
     private String version;
     private String sequenceName;
-    private Game.GameType gameType;
-    private Region.RegionType regionType;
+    private String link;
+    private List<PlayerRank> players;
+    private Game.GameType gameShort;
+    private Region.RegionType regionShort;
     private String apiLink;
 
     public int getId() {
@@ -36,20 +40,36 @@ public class Ranking {
         this.sequenceName = sequenceName;
     }
 
-    public Game.GameType getGameType() {
-        return gameType;
+    public Game.GameType getGameShort() {
+        return gameShort;
     }
 
-    public void setGameType(Game.GameType gameType) {
-        this.gameType = gameType;
+    public void setGameShort(Game.GameType gameShort) {
+        this.gameShort = gameShort;
     }
 
-    public Region.RegionType getRegionType() {
-        return regionType;
+    public Region.RegionType getRegionShort() {
+        return regionShort;
     }
 
-    public void setRegionType(Region.RegionType regionType) {
-        this.regionType = regionType;
+    public void setRegionShort(Region.RegionType regionShort) {
+        this.regionShort = regionShort;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
+    }
+
+    public List<PlayerRank> getPlayers() {
+        return players;
+    }
+
+    public void setPlayers(List<PlayerRank> players) {
+        this.players = players;
     }
 
     public String getApiLink() {
@@ -58,5 +78,22 @@ public class Ranking {
 
     public void setApiLink(String apiLink) {
         this.apiLink = apiLink;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder stringBuilder = new StringBuilder();
+
+        if (players != null) {
+            players.stream().map(PlayerRank::toString)
+                .reduce((p1, p2) -> p1.concat("\n").concat(p2))
+                .ifPresent(s -> stringBuilder.append(s).append("\n"));
+        }
+
+        if (StringUtils.isNotBlank(link)){
+            stringBuilder.append(String.format("Link: %s", link));
+        }
+
+        return stringBuilder.toString();
     }
 }

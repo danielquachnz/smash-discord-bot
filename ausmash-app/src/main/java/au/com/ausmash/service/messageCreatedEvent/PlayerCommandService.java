@@ -43,7 +43,7 @@ public class PlayerCommandService implements CommandService {
         final String name = builder.toString();
         final Player player = playersController.find(name, region);
         LOG.info(String.format("player name = %s", name));
-        final String header = String.format(HEADER, player.getName(), player.getRegionShort().toUpperCase());
+        final String header = String.format(HEADER, player.getName(), player.getRegionShort().name());
         return messageChannel.flatMap(channel -> channel.createMessage(header.concat(player.toString())));
     }
 

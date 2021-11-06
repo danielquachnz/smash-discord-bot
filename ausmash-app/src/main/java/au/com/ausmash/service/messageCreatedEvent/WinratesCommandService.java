@@ -51,11 +51,11 @@ public class WinratesCommandService implements CommandService {
         final Player player = playersController.find(name, regionString);
 
         final StringBuilder stringBuilder = new StringBuilder();
-        final String header = String.format(HEADER, player.getName(), player.getRegionShort().toUpperCase());
+        final String header = String.format(HEADER, player.getName(), player.getRegionShort().name());
         stringBuilder.append(header);
 
         Arrays.stream(Game.GameType.values()).forEachOrdered(gameType -> {
-            final List<WinRate> winRates = playersController.getWinratesForPlayerAndGame(player.getId(), gameType.getId());
+            final List<WinRate> winRates = playersController.listWinratesForPlayerAndGame(player.getId(), gameType.getId());
             totalWinRateDetails(winRates).ifPresent(winRateDetails ->
                 stringBuilder.append(
                     String.format("%s - %s\n", gameType.name(), winRateDetails)

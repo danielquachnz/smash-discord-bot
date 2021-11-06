@@ -8,7 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 public class Player {
     private int id;
     private String name;
-    private String regionShort;
+    private Region.RegionType regionShort;
     private String personalUrl;
     private String twitchUrl;
     private String youtubeUrl;
@@ -38,11 +38,11 @@ public class Player {
         this.name = name;
     }
 
-    public String getRegionShort() {
+    public Region.RegionType getRegionShort() {
         return regionShort;
     }
 
-    public void setRegionShort(String regionShort) {
+    public void setRegionShort(Region.RegionType regionShort) {
         this.regionShort = regionShort;
     }
 

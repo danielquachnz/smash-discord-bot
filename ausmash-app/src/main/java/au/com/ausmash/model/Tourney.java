@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 public class Tourney {
     private int id;
     private String name;
-    private String regionShort;
+    private Region.RegionType regionShort;
     private Date tourneyDate;
     private boolean isMajor;
     private List<Event> events;
@@ -33,11 +33,11 @@ public class Tourney {
         this.name = name;
     }
 
-    public String getRegionShort() {
+    public Region.RegionType getRegionShort() {
         return regionShort;
     }
 
-    public void setRegionShort(String regionShort) {
+    public void setRegionShort(Region.RegionType regionShort) {
         this.regionShort = regionShort;
     }
 
