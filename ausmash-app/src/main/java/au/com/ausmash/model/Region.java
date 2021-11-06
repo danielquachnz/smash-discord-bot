@@ -9,7 +9,7 @@ public class Region {
     private String name;
     private String apiLink;
     @JsonProperty("Short")
-    private String shortName;
+    private RegionType regionType;
 
     public int getId() {
         return id;
@@ -35,16 +35,40 @@ public class Region {
         this.apiLink = apiLink;
     }
 
-    public String getShortName() {
-        return shortName;
+    public RegionType getRegionType() {
+        return regionType;
     }
 
-    public void setShort(String shortName) {
-        this.shortName = shortName;
+    public void setShort(RegionType shortName) {
+        this.regionType = shortName;
     }
 
     @Override
     public String toString() {
-        return getName().concat(": ").concat(getShortName());
+        return getName().concat(": ").concat(getRegionType().name());
+    }
+
+    public enum RegionType {
+        ACT("Australian Capital Territory"),
+        INT("International"),
+        NSW("New South Wales"),
+        NZ("New Zealand"),
+        NT("Northern Territory"),
+        QLD("Queensland"),
+        SA("South Australia"),
+        TAS("Tasmania"),
+        VIC("Victoria"),
+        WA("Western Australia");
+
+        private String longName;
+
+        RegionType(String longName) {
+            this.longName = longName;
+        }
+
+        public String getLongName() {
+            return longName;
+        }
+
     }
 }

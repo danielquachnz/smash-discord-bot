@@ -201,7 +201,7 @@ public class Match {
 
     public String toShortString() {
         final StringBuilder builder = new StringBuilder();
-        builder.append(String.format("%s (%s) ", tourney.getName(), event.getGame().getShortName()));
+        builder.append(String.format("%s (%s) ", tourney.getName(), event.getGame().getGameType()));
         if (winner != null) {
             builder.append(String.format("%s v %s\n", winner, loser));
         } else {

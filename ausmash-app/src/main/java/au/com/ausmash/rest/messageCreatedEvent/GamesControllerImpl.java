@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import au.com.ausmash.model.Game;
 import au.com.ausmash.rest.AbstractAusmashController;
+import au.com.ausmash.rest.exception.ResourceNotFoundException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 class GamesControllerImpl extends AbstractAusmashController implements GamesController {
+
+    @Override
+    public Game findByShortName(String gameShortName) {
+        return listAll().stream()
+            .filter(r -> StringUtils.equalsIgnoreCase(r.getGameType().name(), gameShortName))
+            .findFirst()
+            .orElseThrow(() -> new ResourceNotFoundException(
+                String.format("The game \"%s\" could not be found on Ausmash. Please check your details using !games", gameShortName)));
+
+    }
+
     @Override
     public List<Game> listAll() {
         final ResponseEntity<Game[]> games = restTemplate.exchange(

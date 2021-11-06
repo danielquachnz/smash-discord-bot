@@ -3,6 +3,7 @@ package au.com.ausmash.service.messageCreatedEvent;
 import java.util.List;
 
 import au.com.ausmash.model.Player;
+import au.com.ausmash.model.validator.RegionValidator;
 import au.com.ausmash.rest.messageCreatedEvent.PlayersController;
 import au.com.ausmash.service.CommandService;
 import discord4j.core.object.entity.Message;
@@ -30,6 +31,7 @@ public class PlayerCommandService implements CommandService {
         }
 
         final String region = messageComponents.get(messageComponents.size() - 1);
+
         final StringBuilder builder = new StringBuilder(messageComponents.get(0));
         for (int i = 1; i < messageComponents.size() - 1; i++) {
             builder.append(" ");
@@ -37,8 +39,8 @@ public class PlayerCommandService implements CommandService {
         }
 
         final String name = builder.toString();
-        LOG.info(String.format("player name = %s", name));
         final Player player = playersController.find(name, region);
+        LOG.info(String.format("player name = %s", name));
         final String header = String.format("===%s (%s)===\n", player.getName(), player.getRegionShort());
         return messageChannel.flatMap(channel -> channel.createMessage(header.concat(player.toString())));
 

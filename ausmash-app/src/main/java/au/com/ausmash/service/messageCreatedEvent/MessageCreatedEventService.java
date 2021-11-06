@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import au.com.ausmash.rest.exception.HttpException;
+import au.com.ausmash.rest.exception.ValidationException;
 import au.com.ausmash.service.CommandService;
 import com.google.common.collect.ImmutableList;
 import discord4j.core.event.domain.message.MessageCreateEvent;
@@ -55,6 +56,9 @@ public class MessageCreatedEventService {
                 return toMonoMessageService.get().processMessage(messageChannel, params);
             } catch (final HttpException e) {
                 LOG.info(String.format("Encountered HttpException of type %s: %s", e.getClass().getSimpleName(), e.getMessage()));
+                return messageChannel.flatMap(channel -> channel.createMessage(e.getMessage()));
+            } catch (final ValidationException e) {
+                LOG.info(String.format("Encountered ValidationException %s", e.getMessage()));
                 return messageChannel.flatMap(channel -> channel.createMessage(e.getMessage()));
             }
         }

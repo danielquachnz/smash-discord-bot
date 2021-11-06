@@ -10,5 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 public interface RegionsController {
     String PATH = "regions";
+    Region findByShortName(String regionShortname);
     List<Region> listAll();
 }

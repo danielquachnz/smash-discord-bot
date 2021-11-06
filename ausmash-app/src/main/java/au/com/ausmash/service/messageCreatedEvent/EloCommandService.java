@@ -26,6 +26,7 @@ public class EloCommandService  implements CommandService {
     private PlayersController playersController;
 
     private static final Logger LOG = LoggerFactory.getLogger(EloCommandService.class);
+    private static final String HEADER = "===ELO for %s (%s)===\n";
     static final String COMMAND_NAME = "elo";
 
     @Override
@@ -51,7 +52,7 @@ public class EloCommandService  implements CommandService {
         }
 
         final StringBuilder stringBuilder = new StringBuilder();
-        final String header = String.format("===ELO for %s (%s)===\n",
+        final String header = String.format(HEADER,
             elos.get(0).getPlayer().getName(), elos.get(0).getPlayer().getRegionShort());
         stringBuilder.append(header);
         for (final Elo elo : elos) {

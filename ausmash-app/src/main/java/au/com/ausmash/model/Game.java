@@ -8,7 +8,7 @@ public class Game {
     private int id;
     private String name;
     @JsonProperty("Short")
-    private String shortName;
+    private GameType gameType;
     private int sortOrder;
     private String apiLink;
 
@@ -28,12 +28,12 @@ public class Game {
         this.name = name;
     }
 
-    public String getShortName() {
-        return shortName;
+    public GameType getGameType() {
+        return gameType;
     }
 
-    public void setShortName(String shortName) {
-        this.shortName = shortName;
+    public void setGameType(GameType gameType) {
+        this.gameType = gameType;
     }
 
     public int getSortOrder() {
@@ -54,6 +54,27 @@ public class Game {
 
     @Override
     public String toString() {
-        return String.format("%s - %s", name, shortName);
+        return String.format("%s - %s", name, gameType.name());
+    }
+
+    public enum GameType {
+        SSB64(1),
+        SSBM(2),
+        SSBB(3),
+        PM(5),
+        SSB3DS(11),
+        SSBWU(12),
+        SSBU(13);
+
+        private int id;
+
+        GameType(int id) {
+            this.id = id;
+        }
+
+        public int getId() {
+            return id;
+        }
+
     }
 }

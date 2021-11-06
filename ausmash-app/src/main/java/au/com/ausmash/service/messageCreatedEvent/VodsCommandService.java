@@ -7,6 +7,7 @@ import au.com.ausmash.model.Match;
 import au.com.ausmash.model.Player;
 import au.com.ausmash.model.PlayerShort;
 import au.com.ausmash.model.Vod;
+import au.com.ausmash.model.validator.RegionValidator;
 import au.com.ausmash.rest.messageCreatedEvent.PlayersController;
 import au.com.ausmash.service.CommandService;
 import au.com.ausmash.util.UrlUtil;
@@ -39,6 +40,7 @@ public class VodsCommandService implements CommandService {
         }
 
         final String region = messageComponents.get(messageComponents.size() - 1);
+
         final StringBuilder builder = new StringBuilder(messageComponents.get(0));
         for (int i = 1; i < messageComponents.size() - 1; i++) {
             builder.append(" ");

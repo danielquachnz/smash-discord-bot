@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import au.com.ausmash.model.Region;
 import au.com.ausmash.rest.AbstractAusmashController;
+import au.com.ausmash.rest.exception.ResourceNotFoundException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 class RegionsControllerImpl extends AbstractAusmashController implements RegionsController {
+
+    @Override
+    public Region findByShortName(String regionShortname) {
+        return listAll().stream()
+            .filter(r -> StringUtils.equalsIgnoreCase(r.getRegionType().name(), regionShortname))
+            .findFirst()
+            .orElseThrow(() -> new ResourceNotFoundException(
+                String.format("The region \"%s\" could not be found on Ausmash. Please check your details using !regions", regionShortname)));
+
+    }
 
     @Override
     public List<Region> listAll() {

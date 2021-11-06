@@ -22,7 +22,7 @@ public class GamesCommandService implements CommandService {
     private GamesController gamesController;
 
     private static final Logger LOG = LoggerFactory.getLogger(ChannelsCommandService.class);
-    private static final String HEADER = "=====GAMES=====\n";
+    private static final String HEADER = "=====GAMES=====";
     static final String COMMAND_NAME = "games";
 
     @Override

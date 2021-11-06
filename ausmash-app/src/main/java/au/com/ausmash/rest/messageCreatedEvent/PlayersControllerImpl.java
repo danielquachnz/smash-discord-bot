@@ -1,6 +1,7 @@
 package au.com.ausmash.rest.messageCreatedEvent;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -8,6 +9,8 @@ import java.util.stream.Collectors;
 import au.com.ausmash.model.Elo;
 import au.com.ausmash.model.Player;
 import au.com.ausmash.model.Vod;
+import au.com.ausmash.model.WinRate;
+import au.com.ausmash.model.validator.RegionValidator;
 import au.com.ausmash.rest.AbstractAusmashController;
 import au.com.ausmash.rest.exception.ResourceNotFoundException;
 import au.com.ausmash.util.UrlUtil;
@@ -32,6 +35,7 @@ class PlayersControllerImpl extends AbstractAusmashController implements Players
             getAusmashApiUrl(PlayersController.PATH),"find", name, region);
         LOG.info(String.format("player url = %s", url));
         try {
+            RegionValidator.validateShortName(region);
             final ResponseEntity<Player> response = restTemplate.exchange(
                 url,
                 HttpMethod.GET,
@@ -92,5 +96,23 @@ class PlayersControllerImpl extends AbstractAusmashController implements Players
             return vods.subList(0, VOD_LIMIT);
         }
         return vods;
+    }
+
+    @Override
+    public List<WinRate> getWinratesForPlayerAndGame(int playerId, int gameId) {
+        final String url = UrlUtil.createUrl(
+            getAusmashApiUrl(PlayersController.PATH),
+            Integer.toString(playerId),
+            "winrates",
+            Integer.toString(gameId)
+        );
+        final ResponseEntity<WinRate[]> response = restTemplate.exchange(
+            url,
+            HttpMethod.GET,
+            getAusmashApiKeyHeader(),
+            WinRate[].class
+        );
+        return Arrays.stream(Optional.ofNullable(response.getBody()).orElse(new WinRate[0]))
+            .collect(Collectors.toList());
     }
 }
