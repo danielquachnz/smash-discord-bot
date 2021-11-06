@@ -48,7 +48,7 @@ public class EloCommandService  implements CommandService {
 
         final StringBuilder stringBuilder = new StringBuilder();
         final String header = String.format(HEADER,
-            elos.get(0).getPlayer().getName(), elos.get(0).getPlayer().getRegionShort());
+            elos.get(0).getPlayer().getName(), elos.get(0).getPlayer().getRegionShort().toUpperCase());
         stringBuilder.append(header);
         for (final Elo elo : elos) {
             stringBuilder.append(elo.toString()).append("\n");

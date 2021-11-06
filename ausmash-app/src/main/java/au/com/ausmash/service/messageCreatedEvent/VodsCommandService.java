@@ -57,7 +57,7 @@ public class VodsCommandService implements CommandService {
 
         final PlayerShort player = getPlayer(vods.get(0).getMatch(), name);
         final StringBuilder stringBuilder = new StringBuilder();
-        final String header = String.format(HEADER, name, region);
+        final String header = String.format(HEADER, player.getName(), region.toUpperCase());
         stringBuilder.append(header);
         for (final Vod vod : vods) {
             stringBuilder.append(vod.toString()).append("\n");

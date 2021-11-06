@@ -24,11 +24,15 @@ class MessageCreatedEventMapperService {
     @Autowired
     private HelpCommandService helpCommandService;
     @Autowired
+    private NzRegionsCommandService nzRegionsCommandService;
+    @Autowired
     private PingCommandService pingCommandService;
     @Autowired
     private PlayerCommandService playerCommandService;
     @Autowired
     private RegionsCommandService regionsCommandService;
+    @Autowired
+    private UpcomingCommandService upcomingCommandService;
     @Autowired
     private VodsCommandService vodsCommandService;
     @Autowired
@@ -43,9 +47,11 @@ class MessageCreatedEventMapperService {
             .put(EloCommandService.COMMAND_NAME, eloCommandService)
             .put(GamesCommandService.COMMAND_NAME, gamesCommandService)
             .put(HelpCommandService.COMMAND_NAME, helpCommandService)
+            .put(NzRegionsCommandService.COMMAND_NAME, nzRegionsCommandService)
             .put(PingCommandService.COMMAND_NAME, pingCommandService)
             .put(PlayerCommandService.COMMAND_NAME, playerCommandService)
             .put(RegionsCommandService.COMMAND_NAME, regionsCommandService)
+            .put(UpcomingCommandService.COMMAND_NAME, upcomingCommandService)
             .put(VodsCommandService.COMMAND_NAME, vodsCommandService)
             .put(WinratesCommandService.COMMAND_NAME, winratesCommandService)
             .build();

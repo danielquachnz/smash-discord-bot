@@ -17,7 +17,7 @@ import reactor.core.publisher.Mono;
 @Service
 public class NzRegionsCommandService implements CommandService {
     private static final Logger LOG = LoggerFactory.getLogger(NzRegionsCommandService.class);
-    private static final String HEADER = "=====NZ PR Regions=====\n";
+    private static final String HEADER = "=====NZ PR Regions=====";
     public static final String COMMAND_NAME = "nzregions";
 
     @Override

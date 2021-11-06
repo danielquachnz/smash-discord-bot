@@ -4,13 +4,12 @@ import au.com.ausmash.model.Game;
 import au.com.ausmash.rest.exception.ValidationException;
 import au.com.ausmash.service.messageCreatedEvent.GamesCommandService;
 import au.com.ausmash.service.messageCreatedEvent.MessageCreatedEventService;
-import au.com.ausmash.service.messageCreatedEvent.RegionsCommandService;
 import au.com.ausmash.util.ParameterUtil;
 import org.apache.commons.lang3.EnumUtils;
 
 public class GameValidator {
-    private static final String INVALID_GAME_SHORT_NAME =
-        ParameterUtil.GAME_SHORT
+    private static final String INVALID_GAME_SHORT_NAME
+        = ParameterUtil.GAME_SHORT
         + " [%s] is invalid. Try "
         + MessageCreatedEventService.COMMAND_PREFIX
         + GamesCommandService.COMMAND_NAME

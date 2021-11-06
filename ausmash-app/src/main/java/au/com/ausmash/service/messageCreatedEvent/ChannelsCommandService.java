@@ -21,7 +21,7 @@ class ChannelsCommandService implements CommandService {
     private ChannelsController channelsController;
 
     private static final Logger LOG = LoggerFactory.getLogger(ChannelsCommandService.class);
-    private static final String HEADER = "=====CHANNELS=====\n";
+    private static final String HEADER = "=====Channels=====\n";
     static final String COMMAND_NAME = "channels";
 
     @Override

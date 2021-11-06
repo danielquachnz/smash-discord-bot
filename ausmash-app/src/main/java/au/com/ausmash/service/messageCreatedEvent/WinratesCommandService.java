@@ -51,7 +51,7 @@ public class WinratesCommandService implements CommandService {
         final Player player = playersController.find(name, regionString);
 
         final StringBuilder stringBuilder = new StringBuilder();
-        final String header = String.format(HEADER, player.getName(), player.getRegionShort());
+        final String header = String.format(HEADER, player.getName(), player.getRegionShort().toUpperCase());
         stringBuilder.append(header);
 
         Arrays.stream(Game.GameType.values()).forEachOrdered(gameType -> {
