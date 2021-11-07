@@ -83,7 +83,7 @@ public class Tourney {
 
         if (events != null) {
             final Optional<String> eventsString = events.stream().map(Event::getName).reduce((e1,e2) -> e1.concat(",").concat(e2));
-            eventsString.ifPresent(e -> builder.append("Events: ").append(e));
+            eventsString.ifPresent(e -> builder.append("\nEvents: ").append(e));
         }
 
         builder.append(String.format("\nRegion: %s\n", regionShort));
