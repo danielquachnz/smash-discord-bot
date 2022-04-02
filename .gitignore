@@ -9,3 +9,8 @@
 **/*.iws
 **/logs/*.log
 ausmash-app/src/main/resources/config/application.yml
+.project
+.settings/org.eclipse.buildship.core.prefs
+ausmash-app/.classpath
+ausmash-app/.project
+ausmash-app/.settings/org.eclipse.buildship.core.prefs
