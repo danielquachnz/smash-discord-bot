@@ -1,9 +1,5 @@
 package au.com.ausmash.service.messageCreatedEvent;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import au.com.ausmash.rest.exception.HttpException;
 import au.com.ausmash.rest.exception.ValidationException;
 import com.google.common.collect.ImmutableList;
@@ -16,6 +12,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class MessageCreatedEventService {
@@ -38,6 +38,7 @@ public class MessageCreatedEventService {
             || messageContent.split("\\s+")[0].length() <= COMMAND_PREFIX.length()) {
             return Mono.empty();
         }
+
 
         final List<String> messageComponents
             = Arrays.stream(StringUtils.removeFirst(messageContent, COMMAND_PREFIX).split("\\s+"))

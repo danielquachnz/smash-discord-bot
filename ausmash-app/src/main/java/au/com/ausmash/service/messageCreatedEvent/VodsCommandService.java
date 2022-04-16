@@ -1,7 +1,5 @@
 package au.com.ausmash.service.messageCreatedEvent;
 
-import java.util.List;
-
 import au.com.ausmash.config.AusmashConfig;
 import au.com.ausmash.model.Match;
 import au.com.ausmash.model.PlayerShort;
@@ -9,6 +7,7 @@ import au.com.ausmash.model.Region;
 import au.com.ausmash.model.Vod;
 import au.com.ausmash.rest.messageCreatedEvent.PlayersController;
 import au.com.ausmash.service.CommandService;
+import au.com.ausmash.util.EmbeddedMessageHelper;
 import au.com.ausmash.util.ParameterUtil;
 import au.com.ausmash.util.UrlUtil;
 import discord4j.core.object.entity.Message;
@@ -20,6 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+
 @Service
 public class VodsCommandService implements CommandService {
     @Autowired
@@ -30,14 +31,13 @@ public class VodsCommandService implements CommandService {
     private static final Logger LOG = LoggerFactory.getLogger(VodsCommandService.class);
     static final String COMMAND_NAME = "vods";
     private static final String HEADER = "=====Latest VODs for %s (%s)=====\n";
-    private static final String FOOTER = "For more VODs visit %s";
 
     @Override
     public Mono<Message> processMessage(Mono<MessageChannel> messageChannel, List<String> messageComponents) {
         if (messageComponents.size() < 2) {
             LOG.info(messageComponents.stream()
                 .reduce(COMMAND_NAME.concat(" messageComponents:"), (partialString, element) -> partialString.concat(" ").concat(element)));
-            return messageChannel.flatMap(channel -> channel.createMessage(MessageCreatedEventService.UNRECOGNISED_COMMAND));
+            return EmbeddedMessageHelper.createErrorMessage(messageChannel, MessageCreatedEventService.UNRECOGNISED_COMMAND);
         }
 
         final String region = messageComponents.get(messageComponents.size() - 1);
@@ -52,22 +52,25 @@ public class VodsCommandService implements CommandService {
         final List<Vod> vods = playersController.listVodsForPlayer(name, region);
 
         if (vods.isEmpty()){
-            return messageChannel.flatMap(channel -> channel.createMessage(String.format("No VODs found for %s, region: %s", name, region)));
+            return EmbeddedMessageHelper.createErrorMessage(messageChannel, String.format("No VODs found for %s, region: %s", name, region));
         }
 
         final PlayerShort player = getPlayer(vods.get(0).getMatch(), name);
         final StringBuilder stringBuilder = new StringBuilder();
-        final String header = String.format(HEADER, player.getName(), region.toUpperCase());
-        stringBuilder.append(header);
+
         for (final Vod vod : vods) {
             stringBuilder.append(vod.toString()).append("\n");
         }
+        stringBuilder.append("Only the latest vods are shown, for a full list, click the bolded header");
+        final String description = stringBuilder.toString();
+        LOG.info(description);
+
+
+        final String title = String.format(HEADER, player.getName(), region.toUpperCase());
         final String vodsURL = UrlUtil.createUrl(
             ausmashConfig.getSiteUrl(), "players", Integer.toString(player.getId()), player.getName(), "videos");
-        stringBuilder.append(String.format(FOOTER, vodsURL));
-        LOG.info(stringBuilder.toString());
-        return messageChannel.flatMap(channel -> channel.createMessage(stringBuilder.toString()));
 
+        return EmbeddedMessageHelper.createMessage(messageChannel, description, title, vodsURL);
     }
 
     private PlayerShort getPlayer(Match match, String name) {
@@ -115,6 +118,6 @@ public class VodsCommandService implements CommandService {
             Region.RegionType.NZ.name()
         ));
 
-        return messageChannel.flatMap(channel -> channel.createMessage(stringBuilder.toString()));
+        return EmbeddedMessageHelper.createMessage(messageChannel, stringBuilder.toString());
     }
 }
