@@ -15,3 +15,7 @@ Please ping Wontonz in discord. You can ask for him in the NZ smash discord
 
 ## Author
 Daniel Quach A.K.A. Wontonz
+
+## Notes
+To run, use gradle bootrun
+to exit, use ctrl c
