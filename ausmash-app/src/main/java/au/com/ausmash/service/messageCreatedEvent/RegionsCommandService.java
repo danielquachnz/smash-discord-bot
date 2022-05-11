@@ -5,6 +5,7 @@ import java.util.List;
 import au.com.ausmash.model.Region;
 import au.com.ausmash.rest.messageCreatedEvent.RegionsController;
 import au.com.ausmash.service.CommandService;
+import au.com.ausmash.util.EmbeddedMessageHelper;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.MessageChannel;
 import org.apache.commons.lang3.StringUtils;
@@ -28,20 +29,19 @@ public class RegionsCommandService implements CommandService {
         if (!messageComponents.isEmpty()) {
             LOG.info(messageComponents.stream()
                 .reduce(COMMAND_NAME.concat(" messageComponents:"), (partialString, element) -> partialString.concat(" ").concat(element)));
-            return messageChannel.flatMap(channel -> channel.createMessage(MessageCreatedEventService.UNRECOGNISED_COMMAND));
+            return EmbeddedMessageHelper.createMessage(messageChannel, MessageCreatedEventService.UNRECOGNISED_COMMAND);
         }
         final List<Region> regions = regionsController.listAll();
         final String message = regions.stream()
             .map(Region::toString)
             .map(StringUtils::trim)
             .reduce(HEADER, (partialString, element) -> partialString.concat("\n").concat(element));
-        return messageChannel.flatMap(channel -> channel.createMessage(message));
+        return EmbeddedMessageHelper.createMessage(messageChannel, message);
     }
 
     @Override
     public Mono<Message> help(Mono<MessageChannel> messageChannel) {
-        return messageChannel.flatMap(channel ->
-            channel.createMessage("Returns a list of all regions and their region codes")
-        );
+        return EmbeddedMessageHelper.createMessage(messageChannel,
+                "Returns a list of all regions and their region codes");
     }
 }

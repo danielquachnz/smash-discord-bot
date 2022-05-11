@@ -7,6 +7,7 @@ import au.com.ausmash.model.Tourney;
 import au.com.ausmash.model.validator.RegionValidator;
 import au.com.ausmash.rest.messageCreatedEvent.TourneysController;
 import au.com.ausmash.service.CommandService;
+import au.com.ausmash.util.EmbeddedMessageHelper;
 import au.com.ausmash.util.ParameterUtil;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.MessageChannel;
@@ -36,7 +37,7 @@ class UpcomingCommandService implements CommandService {
                 .map(Tourney::toString)
                 .map(StringUtils::trim)
                 .reduce(HEADER_ALL, (partialString, element) -> partialString.concat("\n\n").concat(element));
-            return messageChannel.flatMap(channel -> channel.createMessage(message));
+            return EmbeddedMessageHelper.createMessage(messageChannel, message);
         }
 
         if (messageComponents.size() == 1) {
@@ -53,7 +54,7 @@ class UpcomingCommandService implements CommandService {
 
         LOG.info(messageComponents.stream()
             .reduce(COMMAND_NAME.concat(" messageComponents:"), (partialString, element) -> partialString.concat(" ").concat(element)));
-        return messageChannel.flatMap(channel -> channel.createMessage(MessageCreatedEventService.UNRECOGNISED_COMMAND));
+        return EmbeddedMessageHelper.createMessage(messageChannel, MessageCreatedEventService.UNRECOGNISED_COMMAND);
     }
 
     @Override
@@ -79,6 +80,6 @@ class UpcomingCommandService implements CommandService {
             Region.RegionType.NZ.name()
         ));
 
-        return messageChannel.flatMap(channel -> channel.createMessage("Returns a list of all upcoming tournaments"));
+        return EmbeddedMessageHelper.createMessage(messageChannel, "Returns a list of all upcoming tournaments");
     }
 }

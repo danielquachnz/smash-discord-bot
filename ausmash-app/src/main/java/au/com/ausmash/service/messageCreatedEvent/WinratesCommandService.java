@@ -11,6 +11,7 @@ import au.com.ausmash.model.WinRate;
 import au.com.ausmash.rest.messageCreatedEvent.GamesController;
 import au.com.ausmash.rest.messageCreatedEvent.PlayersController;
 import au.com.ausmash.service.CommandService;
+import au.com.ausmash.util.EmbeddedMessageHelper;
 import au.com.ausmash.util.ParameterUtil;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.MessageChannel;
@@ -36,7 +37,7 @@ public class WinratesCommandService implements CommandService {
         if (messageComponents.size() < 2) {
             LOG.info(messageComponents.stream()
                 .reduce(COMMAND_NAME.concat(" messageComponents:"), (partialString, element) -> partialString.concat(" ").concat(element)));
-            return messageChannel.flatMap(channel -> channel.createMessage(MessageCreatedEventService.UNRECOGNISED_COMMAND));
+            return EmbeddedMessageHelper.createMessage(messageChannel, MessageCreatedEventService.UNRECOGNISED_COMMAND);
         }
 
         final String regionString = messageComponents.get(messageComponents.size() - 1);
@@ -63,7 +64,7 @@ public class WinratesCommandService implements CommandService {
             );
         });
 
-        return messageChannel.flatMap(channel -> channel.createMessage((stringBuilder.toString())));
+        return EmbeddedMessageHelper.createMessage(messageChannel, stringBuilder.toString());
     }
 
     private Optional<String> totalWinRateDetails(List<WinRate> winRates) {
@@ -117,6 +118,6 @@ public class WinratesCommandService implements CommandService {
             Region.RegionType.NZ.name()
         ));
 
-        return messageChannel.flatMap(channel -> channel.createMessage(stringBuilder.toString()));
+        return EmbeddedMessageHelper.createMessage(messageChannel, stringBuilder.toString());
     }
 }

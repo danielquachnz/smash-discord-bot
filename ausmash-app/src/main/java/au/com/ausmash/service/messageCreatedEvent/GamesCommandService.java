@@ -5,6 +5,7 @@ import java.util.List;
 import au.com.ausmash.model.Game;
 import au.com.ausmash.rest.messageCreatedEvent.GamesController;
 import au.com.ausmash.service.CommandService;
+import au.com.ausmash.util.EmbeddedMessageHelper;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.MessageChannel;
 import org.apache.commons.lang3.StringUtils;
@@ -28,14 +29,16 @@ public class GamesCommandService implements CommandService {
         if (!messageComponents.isEmpty()) {
             LOG.info(messageComponents.stream()
                 .reduce(COMMAND_NAME.concat(" messageComponents:"), (partialString, element) -> partialString.concat(" ").concat(element)));
-            return messageChannel.flatMap(channel -> channel.createMessage(MessageCreatedEventService.UNRECOGNISED_COMMAND));
+            //return messageChannel.flatMap(channel -> channel.createMessage(MessageCreatedEventService.UNRECOGNISED_COMMAND));
+            return EmbeddedMessageHelper.createMessage(messageChannel, MessageCreatedEventService.UNRECOGNISED_COMMAND);
         }
         final List<Game> games = gamesController.listAll();
         final String message = games.stream()
             .map(Game::toString)
             .map(StringUtils::trim)
             .reduce(HEADER, (partialString, element) -> partialString.concat("\n").concat(element));
-        return messageChannel.flatMap(channel -> channel.createMessage(message));
+        //return messageChannel.flatMap(channel -> channel.createMessage(message));
+        return EmbeddedMessageHelper.createMessage(messageChannel, message);
     }
 
     @Override

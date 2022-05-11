@@ -6,6 +6,7 @@ import au.com.ausmash.model.Player;
 import au.com.ausmash.model.Region;
 import au.com.ausmash.rest.messageCreatedEvent.PlayersController;
 import au.com.ausmash.service.CommandService;
+import au.com.ausmash.util.EmbeddedMessageHelper;
 import au.com.ausmash.util.ParameterUtil;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.MessageChannel;
@@ -29,7 +30,7 @@ public class PlayerCommandService implements CommandService {
         if (messageComponents.size() < 2) {
             LOG.info(messageComponents.stream()
                 .reduce(COMMAND_NAME.concat(" messageComponents:"), (partialString, element) -> partialString.concat(" ").concat(element)));
-            return messageChannel.flatMap(channel -> channel.createMessage(MessageCreatedEventService.UNRECOGNISED_COMMAND));
+            return EmbeddedMessageHelper.createMessage(messageChannel, MessageCreatedEventService.UNRECOGNISED_COMMAND);
         }
 
         final String region = messageComponents.get(messageComponents.size() - 1);
@@ -44,7 +45,7 @@ public class PlayerCommandService implements CommandService {
         final Player player = playersController.find(name, region);
         LOG.info(String.format("player name = %s", name));
         final String header = String.format(HEADER, player.getName(), player.getRegionShort().name());
-        return messageChannel.flatMap(channel -> channel.createMessage(header.concat(player.toString())));
+        return EmbeddedMessageHelper.createMessage(messageChannel, header.concat(player.toString()));
     }
 
     @Override
@@ -68,6 +69,6 @@ public class PlayerCommandService implements CommandService {
             Region.RegionType.NZ.name()
         ));
 
-        return messageChannel.flatMap(channel -> channel.createMessage(stringBuilder.toString()));
+        return EmbeddedMessageHelper.createMessage(messageChannel, stringBuilder.toString());
     }
 }

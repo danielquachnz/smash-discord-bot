@@ -3,6 +3,7 @@ package au.com.ausmash.service.messageCreatedEvent;
 import java.util.List;
 
 import au.com.ausmash.service.CommandService;
+import au.com.ausmash.util.EmbeddedMessageHelper;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.MessageChannel;
 import org.slf4j.Logger;
@@ -32,7 +33,8 @@ class HelpCommandService implements CommandService {
         }
 
         if (messageComponents.size() > 1) {
-            return messageChannel.flatMap(channel -> channel.createMessage(TOO_MANY_PARAMS_ERROR));
+            //return messageChannel.flatMap(channel -> channel.createMessage(TOO_MANY_PARAMS_ERROR));
+            return EmbeddedMessageHelper.createMessage(messageChannel, TOO_MANY_PARAMS_ERROR);
         }
         return messageCreatedEventMapperService.getCommandService(messageComponents.get(0)).help(messageChannel);
     }
@@ -53,6 +55,7 @@ class HelpCommandService implements CommandService {
             COMMAND_NAME
         ));
 
-        return messageChannel.flatMap(channel -> channel.createMessage(stringBuilder.toString()));
+        //return messageChannel.flatMap(channel -> channel.createMessage(stringBuilder.toString()));
+        return EmbeddedMessageHelper.createMessage(messageChannel, stringBuilder.toString());
     }
 }

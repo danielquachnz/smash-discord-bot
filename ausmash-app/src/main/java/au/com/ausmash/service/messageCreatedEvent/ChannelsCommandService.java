@@ -5,6 +5,7 @@ import java.util.List;
 import au.com.ausmash.model.Channel;
 import au.com.ausmash.rest.messageCreatedEvent.ChannelsController;
 import au.com.ausmash.service.CommandService;
+import au.com.ausmash.util.EmbeddedMessageHelper;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.MessageChannel;
 import org.apache.commons.lang3.StringUtils;
@@ -29,18 +30,21 @@ class ChannelsCommandService implements CommandService {
         if (!messageComponents.isEmpty()) {
             LOG.info(messageComponents.stream()
                 .reduce(COMMAND_NAME.concat(" messageComponents:"), (partialString, element) -> partialString.concat(" ").concat(element)));
-            return messageChannel.flatMap(channel -> channel.createMessage(MessageCreatedEventService.UNRECOGNISED_COMMAND));
+            return EmbeddedMessageHelper.createMessage(messageChannel, MessageCreatedEventService.UNRECOGNISED_COMMAND);
+            //return messageChannel.flatMap(channel -> channel.createMessage(MessageCreatedEventService.UNRECOGNISED_COMMAND));
         }
         final List<Channel> channels = channelsController.listAll();
         final String message = channels.stream()
             .map(Channel::toString)
             .map(StringUtils::trim)
             .reduce(HEADER, (partialString, element) -> partialString.concat("\n").concat(element));
-        return messageChannel.flatMap(channel -> channel.createMessage(message));
+        //return messageChannel.flatMap(channel -> channel.createMessage(message));
+        return EmbeddedMessageHelper.createMessage(messageChannel, message);
     }
 
     @Override
     public Mono<Message> help(Mono<MessageChannel> messageChannel) {
-        return messageChannel.flatMap(channel -> channel.createMessage("Returns a list of all channels"));
+        //return messageChannel.flatMap(channel -> channel.createMessage("Returns a list of all channels"));
+        return EmbeddedMessageHelper.createMessage(messageChannel,"Returns a list of all channels");
     }
 }

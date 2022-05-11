@@ -14,6 +14,7 @@ import au.com.ausmash.model.validator.GameValidator;
 import au.com.ausmash.model.validator.PrRegionValidator;
 import au.com.ausmash.rest.messageCreatedEvent.RankingsController;
 import au.com.ausmash.service.CommandService;
+import au.com.ausmash.util.EmbeddedMessageHelper;
 import au.com.ausmash.util.ParameterUtil;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.MessageChannel;
@@ -39,7 +40,7 @@ public class PrCommandService implements CommandService {
         if (messageComponents.size() != 2) {
             LOG.info(messageComponents.stream()
                 .reduce(COMMAND_NAME.concat(" messageComponents:"), (partialString, element) -> partialString.concat(" ").concat(element)));
-            return messageChannel.flatMap(channel -> channel.createMessage(MessageCreatedEventService.UNRECOGNISED_COMMAND));
+            return EmbeddedMessageHelper.createMessage(messageChannel, MessageCreatedEventService.UNRECOGNISED_COMMAND);
         }
 
         final String prRegion = messageComponents.get(0).toUpperCase();
@@ -64,9 +65,9 @@ public class PrCommandService implements CommandService {
             .max(Comparator.comparing(Ranking::getId));
 
         if (!oRanking.isPresent()) {
-            return messageChannel.flatMap(channel -> channel.createMessage(
-                String.format("No PR found for region [%s] and game [%s]", prRegion, game)
-            ));
+            return EmbeddedMessageHelper.createMessage(messageChannel,
+                    String.format("No PR found for region [%s] and game [%s]", prRegion, game)
+            );
         }
 
         final StringBuilder stringBuilder = new StringBuilder();
@@ -80,7 +81,7 @@ public class PrCommandService implements CommandService {
         rankings.stream().max(Comparator.comparing(Ranking::getId))
             .ifPresent(stringBuilder::append);
 
-        return messageChannel.flatMap(channel -> channel.createMessage(stringBuilder.toString()));
+        return EmbeddedMessageHelper.createMessage(messageChannel, stringBuilder.toString());
     }
 
 
@@ -106,6 +107,6 @@ public class PrCommandService implements CommandService {
             Game.GameType.SSBU.name()
         ));
 
-        return messageChannel.flatMap(channel -> channel.createMessage(stringBuilder.toString()));
+        return EmbeddedMessageHelper.createMessage(messageChannel, stringBuilder.toString());
     }
 }
